@@ -1,73 +1,53 @@
 # Docs
 Please see the Github Pages Site for complete documentation: [quarkuscoffeeshop.github.io](https://quarkuscoffeeshop.github.io)
 
-# Kitchen Microservice
+# About 
+This repo contains the kitchen microservice which is responsible for making drinks.  The kitchen microservice listens on a Kafka topic for incoming orders, applies the business logic for making an order, and then sends an update on another Kafka topic.
+
+This project uses Quarkus, the Supersonic Subatomic Java Framework.  If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
 
 ## Local deveplomnent steps 
-* uncomment lines 
-```
-#quarkus.container-image.build=true
-#quarkus.container-image.push=true
-#quarkus.native.container-build=true
-#quarkus.jib.base-native-image=quay.io/quarkus/ubi-quarkus-native-image:20.0.0-java11
-#quarkus.container-image.group=jeremydavis
-#quarkus.container-image.name=quarkus-cafe-kitchen
-#quarkus.container-image.tag=0.3
 
-#change
-# Ports
-%dev.quarkus.http.port=8083
+This project requires Kafka.  The quarkuscoffeeshop-support project contains a Docker compose file that will start Kafka.
+
 ```
-## Environment variables
+https://github.com/quarkuscoffeeshop/quarkuscoffeeshop-support.git
+https://github.com/quarkuscoffeeshop/quarkuscoffeeshop-kitchen.git
+```
+
+From inside the quarkuscoffeeshop-support folder run:
+
+```
+docker compose up
+```
+
+From inside the quarkuscoffeeshop-kitchen folder run:
+```
+./mvnw quarkus:dev
+```
+
+## Packaging the application
+
+The application is packageable using `./mvnw package`.
+It produces the executable `quarkuscoffeeshop-kitchen-1.0-SNAPSHOT-runner.jar` file in `/target` directory.
+Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/lib` directory.
+
+The application is now runnable using `java -jar target/quarkuscoffeeshop-kitchen-1.0-SNAPSHOT-runner.jar`.
+
+## Creating a native executable
+
+You can create a native executable using: `./mvnw package -Pnative`.
+
+Or you can use Docker to build the native executable using: `./mvnw package -Pnative -Dquarkus.native.container-build=true`.
+
+You can then execute your binary: `./target/quarkuscoffeeshop-kitchen-1.0-SNAPSHOT-runner`
+
+If you want to learn more about building native executables, please consult https://quarkus.io/guides/building-native-image-guide .
+
+## Running with Docker
 
 Quarkus' configuration can be environment specific: https://quarkus.io/guides/config
 
-This service uses the following environment variables:
-* KAFKA_BOOTSTRAP_URLS
-
-This value will need to be set locally:
-```
-export KAFKA_BOOTSTRAP_URLS=localhost:9092;
-docker run -i --network="host" -e KAFKA_BOOTSTRAP_SERVERS=${KAFKA_BOOTSTRAP_URLS} quarkus-cafe-demo/quarkus-cafe-kitchen:latest
-
-```
-
-## OpenShift Deployment 
-**Deploy quarkus-cafe-kitchen on OpenShift**
-```
-$ oc login https://api.ocp4.examaple.com:64443
-$ oc project quarkus-cafe-demo
-$ oc new-app quay.io/quarkus/ubi-quarkus-native-s2i:20.0.0-java11~https://github.com/jeremyrdavis/quarkus-cafe-demo.git --context-dir=quarkus-cafe-kitchen --name=quarkus-cafe-kitchen
-```
-
-**To delete quarkus-cafe-kitchen application**
-```
-$ oc delete all --selector app=quarkus-cafe-kitchen
-```
-
-
-# Tests
-
-Run the integration tests with:
-
 ```shell
-./mvnw clean verify
-```
-# Sample messages for Kafka
-```shell
-{"eventType":"KITCHEN_ORDER_IN","item":"MUFFIN","itemId":"fd2af2b9-8d97-443d-bed8-371f2782a8b3","name":"Marcus","orderId":"9103dd6b-ed58-423f-90b2-5cc4314996fg"}
-{"eventType":"KITCHEN_ORDER_IN","item":"COOKIE","itemId":"fd2af2b9-8d97-443d-bed8-371f2782a8b3","name":"Anthony","orderId":"6353dd6b-ed58-423f-90b2-5cc431499pbbv"}
-{"eventType":"KITCHEN_ORDER_IN","item":"CAKEPOP","itemId":"fd2af2b9-8d97-443d-bed8-371f2782a8b3","name":"Bruno","orderId":"9103dd6b-ed58-423f-90b2-5cc43147E5GH"}
-{"eventType":"KITCHEN_ORDER_IN","item":"COOKIE","itemId":"fd2af2b9-8d97-443d-bed8-371f2782a8b3","name":"Mason","orderId":"9103dd6b-ed58-423f-90b2-5cc431134cc%"}
-```
-
-## Packaging and running the application
-
-```
-export KAFKA_BOOTSTRAP_URLS=localhost:9092
-./mvnw clean package -Pnative -Dquarkus.native.container-build=true
-docker build -f src/main/docker/Dockerfile.native -t <<DOCKER_HUB_ID>>/quarkuscoffeeshop-kitchen .
-docker run -i --network="host" -e KAFKA_BOOTSTRAP_URLS=${KAFKA_BOOTSTRAP_URLS} <<DOCKER_HUB_ID>>/quarkuscoffeeshop-kitchen:latest
-docker images -a | grep kitchen
-docker tag <<RESULT>> <<DOCKER_HUB_ID>>/quarkuscoffeeshop-kitchen:<<VERSION>>
+docker run -i --network="host" quarkuscoffeeshop-kitchen/quarkus-cafe-kitchen:latest
 ```
