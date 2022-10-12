@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.quarkuscoffeeshop</groupId>
   <artifactId>quarkuscoffeeshop-kitchen</artifactId>
-  <version>5.1.0</version>
+  <version>5.2.0</version>
   <properties>
-    <!-- generated -->
+    <awaitility.version>4.0.2</awaitility.version>
     <compiler-plugin.version>3.8.1</compiler-plugin.version>
     <maven.compiler.parameters>true</maven.compiler.parameters>
     <maven.compiler.source>11</maven.compiler.source>
@@ -17,12 +17,9 @@
     <quarkus.platform.artifact-id>quarkus-universe-bom</quarkus.platform.artifact-id>
     <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
     <quarkus.platform.version>1.13.7.Final</quarkus.platform.version>
-    <surefire-plugin.version>3.0.0-M5</surefire-plugin.version>
-    <!-- added -->
-    <awaitility.version>4.0.2</awaitility.version>
     <smallrye-reactive-messaging-in-memory.version>2.1.0</smallrye-reactive-messaging-in-memory.version>
+    <surefire-plugin.version>3.0.0-M5</surefire-plugin.version>
   </properties>
-
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -34,14 +31,15 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
-
   <dependencies>
-    <!-- Others -->
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
     </dependency>
-    <!-- Testing -->
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-container-image-docker</artifactId>
+    </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-junit5</artifactId>
@@ -63,7 +61,6 @@
       <version>${awaitility.version}</version>
       <scope>test</scope>
     </dependency>
-    <!-- Quarkus Stuff -->
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-core</artifactId>
@@ -111,7 +108,6 @@
         </configuration>
       </plugin>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>${compiler-plugin.version}</version>
         <configuration>
@@ -129,10 +125,7 @@
           <name>native</name>
         </property>
       </activation>
-      <build>
-        <plugins>
-        </plugins>
-      </build>
+      <build />
       <properties>
         <quarkus.package.type>native</quarkus.package.type>
       </properties>
