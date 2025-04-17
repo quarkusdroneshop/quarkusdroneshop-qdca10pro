@@ -25,7 +25,7 @@ public class KafkaResource {
     Kitchen kitchen;
 
     @Inject
-    @Channel("orders-out")
+    @Channel("orders-up")
     Emitter<TicketUp> orderUpEmitter;
 
     @Inject
