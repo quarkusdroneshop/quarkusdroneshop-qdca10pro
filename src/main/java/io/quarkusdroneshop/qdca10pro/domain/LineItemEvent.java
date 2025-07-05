@@ -1,4 +1,4 @@
-package io.quarkusdroneshop.kitchen.domain;
+package io.quarkusdroneshop.qdca10pro.domain;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
 

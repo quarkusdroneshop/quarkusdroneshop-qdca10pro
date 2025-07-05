@@ -1,8 +1,8 @@
-package io.quarkusdroneshop.kitchen.domain;
+package io.quarkusdroneshop.qdca10pro.domain;
 
-import io.quarkusdroneshop.kitchen.domain.exceptions.EightySixException;
-import io.quarkusdroneshop.kitchen.domain.valueobjects.TicketIn;
-import io.quarkusdroneshop.kitchen.domain.valueobjects.TicketUp;
+import io.quarkusdroneshop.qdca10pro.domain.exceptions.EightySixException;
+import io.quarkusdroneshop.qdca10pro.domain.valueobjects.TicketIn;
+import io.quarkusdroneshop.qdca10pro.domain.valueobjects.TicketUp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,9 +13,9 @@ import java.io.IOException;
 import java.net.InetAddress;
 
 @ApplicationScoped
-public class Kitchen {
+public class qdca10pro {
 
-    static final Logger logger = LoggerFactory.getLogger(Kitchen.class.getName());
+    static final Logger logger = LoggerFactory.getLogger(qdca10pro.class.getName());
 
     @Inject
     Inventory inventory;
@@ -38,16 +38,16 @@ public class Kitchen {
 
         int delay;
         switch (ticketIn.getItem()) {
-            case CROISSANT:
+            case QDC_A105_Pro01:
                 delay = 5;
                 break;
-            case CAKEPOP:
+            case QDC_A105_Pro02:
                 delay = 3;
                 break;
-            case CROISSANT_CHOCOLATE:
+            case QDC_A105_Pro03:
                 delay = 5;
                 break;
-            case MUFFIN:
+            case QDC_A105_Pro04:
                 delay = 7;
                 break;
             default:
@@ -122,7 +122,7 @@ public class Kitchen {
 //            return new EightySixEvent(ticketIn.getItem());
 //        }
 //
-//        // give the kitchen time to make the item
+//        // give the QDCA10Pro time to make the item
 //        try {
 //            Thread.sleep(seconds * 1000);
 //        } catch (InterruptedException e) {

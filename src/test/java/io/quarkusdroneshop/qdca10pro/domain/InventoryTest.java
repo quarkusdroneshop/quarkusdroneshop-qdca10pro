@@ -1,7 +1,7 @@
-package io.quarkusdroneshop.kitchen.domain;
+package io.quarkusdroneshop.qdca10pro.domain;
 
 import io.quarkus.test.junit.QuarkusTest;
-import io.quarkusdroneshop.kitchen.domain.exceptions.EightySixException;
+import io.quarkusdroneshop.qdca10pro.domain.exceptions.EightySixException;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -32,10 +32,10 @@ public class InventoryTest {
     @Test @Order(2)
     public void testEightySixQDCA105Pro01() {
 
-        Integer itemCount = inventory.getItemCount(Item.QDC_A105_Pro01);
+        Integer itemCount = inventory.getItemCount(Item.QDC_A105_Pro04);
         for (int i = 0; i < itemCount; i++) {
             try {
-                inventory.decrementItem(Item.QDC_A101);
+                inventory.decrementItem(Item.QDC_A105_Pro04);
             } catch (Exception e) {
                 assertEquals(EightySixException.class, e.getClass());
                 assertEquals(itemCount, Integer.valueOf(i));

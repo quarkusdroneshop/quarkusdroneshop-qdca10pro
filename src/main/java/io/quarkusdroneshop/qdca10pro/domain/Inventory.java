@@ -1,6 +1,6 @@
-package io.quarkusdroneshop.kitchen.domain;
+package io.quarkusdroneshop.qdca10pro.domain;
 
-import io.quarkusdroneshop.kitchen.domain.exceptions.EightySixException;
+import io.quarkusdroneshop.qdca10pro.domain.exceptions.EightySixException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,7 +23,7 @@ public class Inventory {
     }
 
     /*
-        COFFEE_BLACK and COFFEE_WITH_ROOM are simply tracked as COFFEE_BLACK
+        QDC_A101 and COFFEE_WITH_ROOM are simply tracked as QDC_A101
      */
     @PostConstruct
     private void createStock() {
@@ -37,7 +37,7 @@ public class Inventory {
     }
 
     public void decrementItem(Item item) throws EightySixException {
-        if (item.equals(Item.COFFEE_BLACK) || item.equals(Item.COFFEE_WITH_ROOM)) {
+        if (item.equals(Item.QDC_A101) || item.equals(Item.QDC_A102)) {
         }else{
             Integer currentValue = stock.get(item);
             if(currentValue <= 0) throw new EightySixException(item);

@@ -1,8 +1,8 @@
-package io.quarkusdroneshop.kitchen.domain.exceptions;
+package io.quarkusdroneshop.qdca10pro.domain.exceptions;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
-import io.quarkusdroneshop.kitchen.domain.EightySixEvent;
-import io.quarkusdroneshop.kitchen.domain.Item;
+import io.quarkusdroneshop.qdca10pro.domain.EightySixEvent;
+import io.quarkusdroneshop.qdca10pro.domain.Item;
 
 import java.util.ArrayList;
 import java.util.Arrays;

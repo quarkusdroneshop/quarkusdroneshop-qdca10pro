@@ -1,9 +1,9 @@
-package io.quarkusdroneshop.kitchen.domain.valueobjects;
+package io.quarkusdroneshop.qdca10pro.domain.valueobjects;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
-import io.quarkusdroneshop.kitchen.domain.EventType;
-import io.quarkusdroneshop.kitchen.domain.Item;
-import io.quarkusdroneshop.kitchen.domain.LineItemEvent;
+import io.quarkusdroneshop.qdca10pro.domain.EventType;
+import io.quarkusdroneshop.qdca10pro.domain.Item;
+import io.quarkusdroneshop.qdca10pro.domain.LineItemEvent;
 
 import java.time.Instant;
 import java.util.Objects;

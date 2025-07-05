@@ -1,10 +1,10 @@
-package io.quarkusdroneshop.kitchen.infrastructure;
+package io.quarkusdroneshop.qdca10pro.infrastructure;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
-import io.quarkusdroneshop.kitchen.domain.Kitchen;
-import io.quarkusdroneshop.kitchen.domain.exceptions.EightySixException;
-import io.quarkusdroneshop.kitchen.domain.valueobjects.TicketIn;
-import io.quarkusdroneshop.kitchen.domain.valueobjects.TicketUp;
+import io.quarkusdroneshop.qdca10pro.domain.qdca10pro;
+import io.quarkusdroneshop.qdca10pro.domain.exceptions.EightySixException;
+import io.quarkusdroneshop.qdca10pro.domain.valueobjects.TicketIn;
+import io.quarkusdroneshop.qdca10pro.domain.valueobjects.TicketUp;
 import org.eclipse.microprofile.reactive.messaging.Channel;
 import org.eclipse.microprofile.reactive.messaging.Emitter;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
@@ -22,7 +22,7 @@ public class KafkaResource {
     final Logger logger = LoggerFactory.getLogger(KafkaResource.class);
 
     @Inject
-    Kitchen kitchen;
+    qdca10pro QDCA10Pro;
 
     @Inject
     @Channel("orders-up")
@@ -32,13 +32,13 @@ public class KafkaResource {
     @Channel("eighty-six-out")
     Emitter<String> eightySixEmitter;
 
-    @Incoming("kitchen-in")
+    @Incoming("qdca10pro-in")
     public CompletableFuture handleOrderIn(final TicketIn ticketIn) {
 
         logger.debug("TicketIn received: {}", ticketIn);
 
         return CompletableFuture.supplyAsync(() -> {
-            return kitchen.make(ticketIn);
+            return QDCA10Pro.make(ticketIn);
         }).thenApply(orderUp -> {
             logger.debug("OrderUp: {}", orderUp);
             orderUpEmitter.send(orderUp);

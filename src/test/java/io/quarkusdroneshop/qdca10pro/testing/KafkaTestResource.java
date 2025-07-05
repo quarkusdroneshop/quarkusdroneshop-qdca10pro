@@ -1,4 +1,4 @@
-package io.quarkusdroneshop.kitchen.testing;
+package io.quarkusdroneshop.qdca10pro.testing;
 
 import io.quarkus.test.common.QuarkusTestResourceLifecycleManager;
 import io.smallrye.reactive.messaging.connectors.InMemoryConnector;
@@ -12,7 +12,7 @@ public class KafkaTestResource implements QuarkusTestResourceLifecycleManager {
     @Override
     public Map<String, String> start() {
         Map<String, String> env = new HashMap<>();
-        Map<String, String> props1 = InMemoryConnector.switchIncomingChannelsToInMemory("kitchen-in");
+        Map<String, String> props1 = InMemoryConnector.switchIncomingChannelsToInMemory("qdca10pro-in");
         Map<String, String> props2 = InMemoryConnector.switchOutgoingChannelsToInMemory("orders-up");
         Map<String, String> props3 = InMemoryConnector.switchOutgoingChannelsToInMemory("eighty-six-out");
         env.putAll(props1);

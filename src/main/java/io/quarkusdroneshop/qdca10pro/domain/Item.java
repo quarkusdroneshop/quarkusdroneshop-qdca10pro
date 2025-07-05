@@ -1,13 +1,14 @@
-package io.quarkusdroneshop.kitchen.domain;
+package io.quarkusdroneshop.qdca10pro.domain;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
 
 @RegisterForReflection
 public enum Item {
 
-    //Beverages
-    CAPPUCCINO, COFFEE_BLACK, COFFEE_WITH_ROOM, ESPRESSO, ESPRESSO_DOUBLE, LATTE,
+    //QD-A10 SERIES
+    QDC_A101, QDC_A102, QDC_A103, QDC_A104_AC, QDC_A104_AT,
 
-    //Food
-    CAKEPOP, CROISSANT, MUFFIN, CROISSANT_CHOCOLATE
+    //QD-A10Pro SERIES
+    QDC_A105_Pro01, QDC_A105_Pro02, QDC_A105_Pro03, QDC_A105_Pro04, 
 }
+

@@ -1,14 +1,14 @@
-package io.quarkusdroneshop.kitchen.infrastructure;
+package io.quarkusdroneshop.qdca10pro.infrastructure;
 
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.TestProfile;
 import io.quarkus.test.junit.mockito.InjectSpy;
-import io.quarkusdroneshop.kitchen.domain.Item;
-import io.quarkusdroneshop.kitchen.domain.Kitchen;
-import io.quarkusdroneshop.kitchen.domain.valueobjects.TicketIn;
-import io.quarkusdroneshop.kitchen.testing.KafkaTestProfile;
-import io.quarkusdroneshop.kitchen.testing.KafkaTestResource;
+import io.quarkusdroneshop.qdca10pro.domain.Item;
+import io.quarkusdroneshop.qdca10pro.domain.qdca10pro;
+import io.quarkusdroneshop.qdca10pro.domain.valueobjects.TicketIn;
+import io.quarkusdroneshop.qdca10pro.testing.KafkaTestProfile;
+import io.quarkusdroneshop.qdca10pro.testing.KafkaTestResource;
 import io.smallrye.reactive.messaging.connectors.InMemoryConnector;
 import io.smallrye.reactive.messaging.connectors.InMemorySource;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -35,22 +35,17 @@ public class KafkaResourceTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(KafkaResourceTest.class);
 
-    @ConfigProperty(name = "mp.messaging.incoming.kitchen-in.topic")
-    protected String KITCHEN_IN;
+    @ConfigProperty(name = "mp.messaging.incoming.qdca10pro-in.topic")
+    protected String QDCA10Pro_IN;
 
     @InjectSpy
-    Kitchen kitchen;
+    qdca10pro QDCA10Pro;
 
     @Inject
     @Any
     InMemoryConnector connector;
 
     InMemorySource<TicketIn> ordersIn;
-
-//    @BeforeEach
-//    public void setUp() {
-//        ordersIn = connector.source(ORDERS_IN);
-//    }
 
     @Test
     public void testOrderIn() {
@@ -60,13 +55,13 @@ public class KafkaResourceTest {
         TicketIn ticketIn = new TicketIn(
             UUID.randomUUID().toString(),
             UUID.randomUUID().toString(),
-            Item.CAKEPOP,
+            Item.QDC_A105_Pro01,
             "Uhura",
             Instant.now()
         );
-        ordersIn = connector.source("kitchen-in");
+        ordersIn = connector.source("qdca10pro-in");
         ordersIn.send(ticketIn);
         await().atLeast(6, TimeUnit.SECONDS);
-        verify(kitchen, times(1)).make(any(TicketIn.class));
+        verify(QDCA10Pro, times(1)).make(any(TicketIn.class));
     }
 }

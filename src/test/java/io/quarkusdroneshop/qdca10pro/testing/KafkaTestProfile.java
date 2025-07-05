@@ -1,4 +1,4 @@
-package io.quarkusdroneshop.kitchen.testing;
+package io.quarkusdroneshop.qdca10pro.testing;
 
 import io.quarkus.test.junit.QuarkusTestProfile;
 
