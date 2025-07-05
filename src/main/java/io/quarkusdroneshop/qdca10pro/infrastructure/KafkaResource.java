@@ -1,10 +1,10 @@
-package io.quarkuscoffeeshop.kitchen.infrastructure;
+package io.quarkusdroneshop.kitchen.infrastructure;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
-import io.quarkuscoffeeshop.kitchen.domain.Kitchen;
-import io.quarkuscoffeeshop.kitchen.domain.exceptions.EightySixException;
-import io.quarkuscoffeeshop.kitchen.domain.valueobjects.TicketIn;
-import io.quarkuscoffeeshop.kitchen.domain.valueobjects.TicketUp;
+import io.quarkusdroneshop.kitchen.domain.Kitchen;
+import io.quarkusdroneshop.kitchen.domain.exceptions.EightySixException;
+import io.quarkusdroneshop.kitchen.domain.valueobjects.TicketIn;
+import io.quarkusdroneshop.kitchen.domain.valueobjects.TicketUp;
 import org.eclipse.microprofile.reactive.messaging.Channel;
 import org.eclipse.microprofile.reactive.messaging.Emitter;
 import org.eclipse.microprofile.reactive.messaging.Incoming;

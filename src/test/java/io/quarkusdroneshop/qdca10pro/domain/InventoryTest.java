@@ -1,7 +1,7 @@
-package io.quarkuscoffeeshop.kitchen.domain;
+package io.quarkusdroneshop.kitchen.domain;
 
 import io.quarkus.test.junit.QuarkusTest;
-import io.quarkuscoffeeshop.kitchen.domain.exceptions.EightySixException;
+import io.quarkusdroneshop.kitchen.domain.exceptions.EightySixException;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;

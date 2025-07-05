@@ -49,5 +49,5 @@ If you want to learn more about building native executables, please consult http
 Quarkus' configuration can be environment specific: https://quarkus.io/guides/config
 
 ```shell
-docker run -i --network="host" quarkuscoffeeshop-kitchen/quarkus-cafe-kitchen:latest
+docker run -i --network="host" quarkuscoffeeshop-kitchen/quarkus-shop-kitchen:latest
 ```

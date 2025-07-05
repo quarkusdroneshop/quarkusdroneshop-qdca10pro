@@ -1,8 +1,8 @@
-package io.quarkuscoffeeshop.kitchen.domain;
+package io.quarkusdroneshop.kitchen.domain;
 
-import io.quarkuscoffeeshop.kitchen.domain.exceptions.EightySixException;
-import io.quarkuscoffeeshop.kitchen.domain.valueobjects.TicketIn;
-import io.quarkuscoffeeshop.kitchen.domain.valueobjects.TicketUp;
+import io.quarkusdroneshop.kitchen.domain.exceptions.EightySixException;
+import io.quarkusdroneshop.kitchen.domain.valueobjects.TicketIn;
+import io.quarkusdroneshop.kitchen.domain.valueobjects.TicketUp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -74,7 +74,7 @@ public class Kitchen {
             throw new EightySixException(ticketIn.getItem());
         }
 
-        // model the barista's time making the drink
+        // model the qdca10's time making the drink
         try {
             Thread.sleep(seconds * 1000);
         } catch (InterruptedException e) {

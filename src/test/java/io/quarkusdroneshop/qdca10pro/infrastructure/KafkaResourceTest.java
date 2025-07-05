@@ -1,14 +1,14 @@
-package io.quarkuscoffeeshop.kitchen.infrastructure;
+package io.quarkusdroneshop.kitchen.infrastructure;
 
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.TestProfile;
 import io.quarkus.test.junit.mockito.InjectSpy;
-import io.quarkuscoffeeshop.kitchen.domain.Item;
-import io.quarkuscoffeeshop.kitchen.domain.Kitchen;
-import io.quarkuscoffeeshop.kitchen.domain.valueobjects.TicketIn;
-import io.quarkuscoffeeshop.kitchen.testing.KafkaTestProfile;
-import io.quarkuscoffeeshop.kitchen.testing.KafkaTestResource;
+import io.quarkusdroneshop.kitchen.domain.Item;
+import io.quarkusdroneshop.kitchen.domain.Kitchen;
+import io.quarkusdroneshop.kitchen.domain.valueobjects.TicketIn;
+import io.quarkusdroneshop.kitchen.testing.KafkaTestProfile;
+import io.quarkusdroneshop.kitchen.testing.KafkaTestResource;
 import io.smallrye.reactive.messaging.connectors.InMemoryConnector;
 import io.smallrye.reactive.messaging.connectors.InMemorySource;
 import org.eclipse.microprofile.config.inject.ConfigProperty;

@@ -1,8 +1,8 @@
-package io.quarkuscoffeeshop.kitchen.domain;
+package io.quarkusdroneshop.kitchen.domain;
 
 import io.quarkus.test.junit.QuarkusTest;
-import io.quarkuscoffeeshop.kitchen.domain.valueobjects.TicketIn;
-import io.quarkuscoffeeshop.kitchen.domain.valueobjects.TicketUp;
+import io.quarkusdroneshop.kitchen.domain.valueobjects.TicketIn;
+import io.quarkusdroneshop.kitchen.domain.valueobjects.TicketUp;
 import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
