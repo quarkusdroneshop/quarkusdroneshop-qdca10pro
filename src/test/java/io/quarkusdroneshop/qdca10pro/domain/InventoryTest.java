@@ -30,12 +30,12 @@ public class InventoryTest {
     }
 
     @Test @Order(2)
-    public void testEightySixCroissants() {
+    public void testEightySixQDCA105Pro01() {
 
-        Integer itemCount = inventory.getItemCount(Item.CROISSANT);
+        Integer itemCount = inventory.getItemCount(Item.QDC_A105_Pro01);
         for (int i = 0; i < itemCount; i++) {
             try {
-                inventory.decrementItem(Item.COFFEE_BLACK);
+                inventory.decrementItem(Item.QDC_A101);
             } catch (Exception e) {
                 assertEquals(EightySixException.class, e.getClass());
                 assertEquals(itemCount, Integer.valueOf(i));
