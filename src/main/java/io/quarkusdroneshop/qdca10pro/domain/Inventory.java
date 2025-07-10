@@ -23,7 +23,7 @@ public class Inventory {
     }
 
     /*
-        QDC_A101 and COFFEE_WITH_ROOM are simply tracked as QDC_A101
+        QDC_A101 and DRONE_WITH_ROOM are simply tracked as QDC_A101
      */
     @PostConstruct
     private void createStock() {
