@@ -1,16 +1,13 @@
 package io.quarkusdroneshop.qdca10pro.domain.valueobjects;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
-import io.quarkusdroneshop.qdca10pro.domain.EventType;
 import io.quarkusdroneshop.qdca10pro.domain.Item;
-import io.quarkusdroneshop.qdca10pro.domain.LineItemEvent;
 
 import java.time.Instant;
-import java.util.Objects;
 import java.util.StringJoiner;
 
 @RegisterForReflection
-public class TicketUp {
+public class OrderIn {
 
     final String orderId;
 
@@ -22,26 +19,22 @@ public class TicketUp {
 
     final Instant timestamp;
 
-    final String madeBy;
-
-    public TicketUp(final String orderId, final String lineItemId, final Item item, final String name, final String madeBy) {
+    public OrderIn(final String orderId, final String lineItemId, final Item item, final String name, final Instant timestamp) {
         this.orderId = orderId;
         this.lineItemId = lineItemId;
         this.item = item;
         this.name = name;
-        this.madeBy = madeBy;
-        this.timestamp = Instant.now();
+        this.timestamp = timestamp;
     }
 
     @Override
     public String toString() {
-        return new StringJoiner(", ", TicketUp.class.getSimpleName() + "[", "]")
+        return new StringJoiner(", ", OrderIn.class.getSimpleName() + "[", "]")
                 .add("orderId='" + orderId + "'")
                 .add("lineItemId='" + lineItemId + "'")
                 .add("item=" + item)
                 .add("name='" + name + "'")
                 .add("timestamp=" + timestamp)
-                .add("madeBy='" + madeBy + "'")
                 .toString();
     }
 
@@ -50,14 +43,13 @@ public class TicketUp {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        TicketUp ticketUp = (TicketUp) o;
+        OrderIn ticketIn = (OrderIn) o;
 
-        if (orderId != null ? !orderId.equals(ticketUp.orderId) : ticketUp.orderId != null) return false;
-        if (lineItemId != null ? !lineItemId.equals(ticketUp.lineItemId) : ticketUp.lineItemId != null) return false;
-        if (item != ticketUp.item) return false;
-        if (name != null ? !name.equals(ticketUp.name) : ticketUp.name != null) return false;
-        if (timestamp != null ? !timestamp.equals(ticketUp.timestamp) : ticketUp.timestamp != null) return false;
-        return madeBy != null ? madeBy.equals(ticketUp.madeBy) : ticketUp.madeBy == null;
+        if (orderId != null ? !orderId.equals(ticketIn.orderId) : ticketIn.orderId != null) return false;
+        if (lineItemId != null ? !lineItemId.equals(ticketIn.lineItemId) : ticketIn.lineItemId != null) return false;
+        if (item != ticketIn.item) return false;
+        if (name != null ? !name.equals(ticketIn.name) : ticketIn.name != null) return false;
+        return timestamp != null ? timestamp.equals(ticketIn.timestamp) : ticketIn.timestamp == null;
     }
 
     @Override
@@ -67,7 +59,6 @@ public class TicketUp {
         result = 31 * result + (item != null ? item.hashCode() : 0);
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (timestamp != null ? timestamp.hashCode() : 0);
-        result = 31 * result + (madeBy != null ? madeBy.hashCode() : 0);
         return result;
     }
 
@@ -89,9 +80,5 @@ public class TicketUp {
 
     public Instant getTimestamp() {
         return timestamp;
-    }
-
-    public String getMadeBy() {
-        return madeBy;
     }
 }

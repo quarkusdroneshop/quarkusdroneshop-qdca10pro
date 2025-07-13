@@ -5,8 +5,8 @@ import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.TestProfile;
 import io.quarkus.test.junit.mockito.InjectSpy;
 import io.quarkusdroneshop.qdca10pro.domain.Item;
-import io.quarkusdroneshop.qdca10pro.domain.qdca10pro;
-import io.quarkusdroneshop.qdca10pro.domain.valueobjects.TicketIn;
+import io.quarkusdroneshop.qdca10pro.domain.Qdca10pro;
+import io.quarkusdroneshop.qdca10pro.domain.valueobjects.OrderIn;
 import io.quarkusdroneshop.qdca10pro.testing.KafkaTestProfile;
 import io.quarkusdroneshop.qdca10pro.testing.KafkaTestResource;
 import io.smallrye.reactive.messaging.connectors.InMemoryConnector;
@@ -36,23 +36,23 @@ public class KafkaResourceTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(KafkaResourceTest.class);
 
     @ConfigProperty(name = "mp.messaging.incoming.qdca10pro-in.topic")
-    protected String QDCA10Pro_IN;
+    protected String Qdca10pro_in;
 
     @InjectSpy
-    qdca10pro QDCA10Pro;
+    Qdca10pro Qdca10pro;
 
     @Inject
     @Any
     InMemoryConnector connector;
 
-    InMemorySource<TicketIn> ordersIn;
+    InMemorySource<OrderIn> ordersIn;
 
     @Test
     public void testOrderIn() {
 
         LOGGER.debug("testOrderIn");
 
-        TicketIn ticketIn = new TicketIn(
+        OrderIn ticketIn = new OrderIn(
             UUID.randomUUID().toString(),
             UUID.randomUUID().toString(),
             Item.QDC_A105_Pro01,
@@ -62,6 +62,6 @@ public class KafkaResourceTest {
         ordersIn = connector.source("qdca10pro-in");
         ordersIn.send(ticketIn);
         await().atLeast(6, TimeUnit.SECONDS);
-        verify(QDCA10Pro, times(1)).make(any(TicketIn.class));
+        verify(Qdca10pro, times(1)).make(any(OrderIn.class));
     }
 }

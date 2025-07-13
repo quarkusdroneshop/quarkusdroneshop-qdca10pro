@@ -1,8 +1,11 @@
 package io.quarkusdroneshop.qdca10pro.domain;
 
 import io.quarkusdroneshop.qdca10pro.domain.exceptions.EightySixException;
-import io.quarkusdroneshop.qdca10pro.domain.valueobjects.TicketIn;
-import io.quarkusdroneshop.qdca10pro.domain.valueobjects.TicketUp;
+import io.quarkusdroneshop.qdca10pro.domain.valueobjects.OrderIn;
+import io.quarkusdroneshop.qdca10pro.domain.valueobjects.OrderUp;
+import io.quarkusdroneshop.qdca10pro.domain.valueobjects.Qdca10proResult;
+import io.quarkusdroneshop.qdca10pro.domain.EightySixEvent;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,14 +16,14 @@ import java.io.IOException;
 import java.net.InetAddress;
 
 @ApplicationScoped
-public class qdca10pro {
+public class Qdca10pro {
 
-    static final Logger logger = LoggerFactory.getLogger(qdca10pro.class.getName());
+    static final Logger logger = LoggerFactory.getLogger(Qdca10pro.class.getName());
 
     @Inject
     Inventory inventory;
 
-    private String madeBy = "undefined";
+    private String madeBy = "";
 
     @PostConstruct
     void setHostName() {
@@ -32,36 +35,24 @@ public class qdca10pro {
         }
     }
 
-    public TicketUp make(final TicketIn ticketIn){
+    public Qdca10proResult make(final OrderIn ticketIn){
 
         logger.debug("making: {}", ticketIn.getItem());
-
-        int delay;
-        switch (ticketIn.getItem()) {
-            case QDC_A105_Pro01:
-                delay = 5;
-                break;
-            case QDC_A105_Pro02:
-                delay = 3;
-                break;
-            case QDC_A105_Pro03:
-                delay = 5;
-                break;
-            case QDC_A105_Pro04:
-                delay = 7;
-                break;
-            default:
-                delay = 10;
-                break;
-        };
-        return prepare(ticketIn, delay);
+        int delay = calculateDelay(ticketIn);
+        
+        try {
+            OrderUp orderUp = prepare(ticketIn, delay);
+            return new Qdca10proResult(orderUp);
+        } catch (EightySixException e) {
+            return new Qdca10proResult(new EightySixEvent(ticketIn.getItem()));
+        }
     }
 
     /*
     Delay for the specified time and then return the completed TicketUp
     @throws RuntimeException for 86'd items
  */
-    private TicketUp prepare(final TicketIn ticketIn, int seconds) {
+    private OrderUp prepare(final OrderIn ticketIn, int seconds) {
 
         // decrement the item in inventory
         try {
@@ -82,7 +73,7 @@ public class qdca10pro {
         }
 
         // return the completed drink
-        return new TicketUp(
+        return new OrderUp(
                 ticketIn.getOrderId(),
                 ticketIn.getLineItemId(),
                 ticketIn.getItem(),
@@ -90,7 +81,20 @@ public class qdca10pro {
                 madeBy);
     }
 
-
+    private int calculateDelay(OrderIn ticketIn) {
+        switch (ticketIn.getItem()) {
+            case QDC_A105_Pro01:
+                return 5;
+            case QDC_A105_Pro02:
+                return 3;
+            case QDC_A105_Pro03:
+                return 5;
+            case QDC_A105_Pro04:
+                return 7;
+            default:
+                return 10;
+        }
+    }
 //    public CompletableFuture<Event> make(final TicketIn ticketIn) {
 //
 //        logger.debug("orderIn: " + ticketIn.toString());

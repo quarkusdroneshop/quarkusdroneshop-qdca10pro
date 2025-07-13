@@ -22,9 +22,6 @@ public class Inventory {
         super();
     }
 
-    /*
-        QDC_A101 and DRONE_WITH_ROOM are simply tracked as QDC_A101
-     */
     @PostConstruct
     private void createStock() {
         stock = new HashMap<>();
@@ -37,12 +34,9 @@ public class Inventory {
     }
 
     public void decrementItem(Item item) throws EightySixException {
-        if (item.equals(Item.QDC_A101) || item.equals(Item.QDC_A102)) {
-        }else{
-            Integer currentValue = stock.get(item);
-            if(currentValue <= 0) throw new EightySixException(item);
-            stock.replace(item, currentValue - 1);
-        }
+        Integer currentValue = stock.get(item);
+        if(currentValue <= 0) throw new EightySixException(item);
+        stock.replace(item, currentValue - 1);
     }
 
     public Integer getItemCount(Item item) {
