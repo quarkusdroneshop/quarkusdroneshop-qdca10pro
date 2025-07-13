@@ -16,9 +16,9 @@ import java.io.IOException;
 import java.net.InetAddress;
 
 @ApplicationScoped
-public class qdca10pro {
+public class Qdca10pro {
 
-    static final Logger logger = LoggerFactory.getLogger(qdca10pro.class.getName());
+    static final Logger logger = LoggerFactory.getLogger(Qdca10pro.class.getName());
 
     @Inject
     Inventory inventory;
