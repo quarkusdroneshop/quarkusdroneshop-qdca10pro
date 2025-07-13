@@ -5,7 +5,7 @@ import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.TestProfile;
 import io.quarkus.test.junit.mockito.InjectSpy;
 import io.quarkusdroneshop.qdca10pro.domain.Item;
-import io.quarkusdroneshop.qdca10pro.domain.Qdca10pro;
+import io.quarkusdroneshop.qdca10pro.domain.qdca10pro;
 import io.quarkusdroneshop.qdca10pro.domain.valueobjects.OrderIn;
 import io.quarkusdroneshop.qdca10pro.testing.KafkaTestProfile;
 import io.quarkusdroneshop.qdca10pro.testing.KafkaTestResource;
@@ -39,7 +39,7 @@ public class KafkaResourceTest {
     protected String Qdca10pro_in;
 
     @InjectSpy
-    Qdca10pro Qdca10pro;
+    qdca10pro Qdca10pro;
 
     @Inject
     @Any

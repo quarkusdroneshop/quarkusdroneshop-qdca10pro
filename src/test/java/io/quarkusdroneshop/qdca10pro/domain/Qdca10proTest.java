@@ -4,7 +4,7 @@ import io.quarkus.test.junit.QuarkusTest;
 import io.quarkusdroneshop.qdca10pro.domain.valueobjects.OrderIn;
 import io.quarkusdroneshop.qdca10pro.domain.valueobjects.OrderUp;
 import io.quarkusdroneshop.qdca10pro.domain.valueobjects.Qdca10proResult;
-import io.quarkusdroneshop.qdca10pro.domain.Qdca10pro;
+import io.quarkusdroneshop.qdca10pro.domain.qdca10pro;
 import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
@@ -22,7 +22,7 @@ public class Qdca10proTest {
     static final Logger logger = Logger.getLogger(Qdca10proTest.class.getName());
 
     @Inject
-    Qdca10pro Qdca10pro;
+    qdca10pro Qdca10pro;
 
     @Test
     public void testOrderCakepop() throws ExecutionException, InterruptedException {

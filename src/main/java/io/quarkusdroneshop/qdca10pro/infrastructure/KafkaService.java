@@ -1,7 +1,7 @@
 package io.quarkusdroneshop.qdca10pro.infrastructure;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
-import io.quarkusdroneshop.qdca10pro.domain.Qdca10pro;
+import io.quarkusdroneshop.qdca10pro.domain.qdca10pro;
 import io.quarkusdroneshop.qdca10pro.domain.exceptions.EightySixException;
 import io.quarkusdroneshop.qdca10pro.domain.valueobjects.OrderIn;
 import io.quarkusdroneshop.qdca10pro.domain.valueobjects.OrderUp;
@@ -22,7 +22,7 @@ public class KafkaService {
     final Logger logger = LoggerFactory.getLogger(KafkaService.class);
 
     @Inject
-    Qdca10pro Qdca10pro;
+    qdca10pro Qdca10pro;
 
     @Inject
     @Channel("orders-up")
