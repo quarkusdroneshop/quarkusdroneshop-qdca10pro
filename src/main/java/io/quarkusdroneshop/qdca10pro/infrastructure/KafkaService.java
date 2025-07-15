@@ -4,6 +4,7 @@ import io.quarkus.runtime.annotations.RegisterForReflection;
 import io.quarkusdroneshop.qdca10pro.domain.Qdca10pro;
 import io.quarkusdroneshop.qdca10pro.domain.valueobjects.OrderIn;
 import io.quarkusdroneshop.qdca10pro.domain.valueobjects.OrderUp;
+
 import org.eclipse.microprofile.reactive.messaging.Channel;
 import org.eclipse.microprofile.reactive.messaging.Emitter;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
@@ -18,47 +19,46 @@ import java.util.concurrent.CompletableFuture;
 @RegisterForReflection
 public class KafkaService {
 
-    final Logger logger = LoggerFactory.getLogger(KafkaService.class);
+    Logger logger = LoggerFactory.getLogger(KafkaService.class);
 
     @Inject
-    Qdca10pro Qdca10pro;
+    Qdca10pro qdca10pro;
 
     @Inject
     @Channel("orders-up")
     Emitter<OrderUp> orderUpEmitter;
 
     @Inject
-    @Channel("eighty-six-out")
+    @Channel("eighty-six")
     Emitter<String> eightySixEmitter;
 
-    @Incoming("qdca10pro-in")
-    public CompletableFuture<Void> onOrderInPro(final OrderIn orderIn) {
+    @Incoming("orders-in")
+    public CompletableFuture<Void> onOrderIn(final OrderIn orderIn) {
 
-        logger.debug("OrderTicket (pro) received: {}", orderIn);
+        logger.debug("OrderTicket received: {}", orderIn);
 
         return CompletableFuture
-            .supplyAsync(new Qdca10proTask(Qdca10pro, orderIn))
+            .supplyAsync(new Qdca10proTask(qdca10pro, orderIn))
             .thenAccept(result -> {
-
                 if (result.isEightySixed()) {
-                    logger.debug("Item is eighty-sixed (pro), sending to topic: {}", orderIn.getItem());
+                    logger.debug("Item is eighty-sixed, sending to topic: {}", orderIn.getItem());
                     eightySixEmitter.send(orderIn.getItem().toString())
                         .whenComplete((res, ex) -> {
                             if (ex != null) {
-                                logger.error("Failed to send to eighty-six-out topic (pro)", ex);
+                                logger.error("Failed to send to eighty-six topic", ex);
                             } else {
-                                logger.debug("Sent to eighty-six-out topic (pro) successfully");
+                                logger.debug("Sent to eighty-six topic successfully");
                             }
                         });
                 } else {
                     OrderUp orderUp = result.getOrderUp();
-                    logger.debug("OrderUp (pro): {}", orderUp);
+                    logger.debug("OrderUp: {}", orderUp);
                     orderUpEmitter.send(orderUp)
                         .whenComplete((res, ex) -> {
                             if (ex != null) {
-                                logger.error("Failed to send OrderUp (pro) to Kafka", ex);
+                                logger.error("Failed to send OrderUp to Kafka", ex);
                             } else {
-                                logger.debug("OrderUp (pro) sent successfully to Kafka");
+                                logger.debug("OrderUp sent successfully to Kafka");
                             }
                         });
                 }

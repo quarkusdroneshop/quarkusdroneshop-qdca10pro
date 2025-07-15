@@ -56,8 +56,7 @@ public class KafkaResourceTest {
             UUID.randomUUID().toString(),
             UUID.randomUUID().toString(),
             Item.QDC_A105_Pro01,
-            "Uhura",
-            Instant.now()
+            "Uhura"
         );
         ordersIn = connector.source("qdca10pro-in");
         ordersIn.send(ticketIn);

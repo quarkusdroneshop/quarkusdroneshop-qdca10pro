@@ -6,6 +6,9 @@ import io.quarkusdroneshop.qdca10pro.domain.Item;
 import java.time.Instant;
 import java.util.StringJoiner;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @RegisterForReflection
 public class OrderIn {
 
@@ -19,13 +22,17 @@ public class OrderIn {
 
     final Instant timestamp;
 
-    public OrderIn(final String orderId, final String lineItemId, final Item item, final String name, final Instant timestamp) {
+    public OrderIn(String orderId, String lineItemId, Item item, String name) {
         this.orderId = orderId;
         this.lineItemId = lineItemId;
         this.item = item;
         this.name = name;
-        this.timestamp = timestamp;
+        this.timestamp = Instant.now();
     }
+
+
+
+
 
     @Override
     public String toString() {

@@ -29,7 +29,7 @@ public class Qdca10proTest {
 
         logger.info("Test that a Cakepop is ready instantly");
 
-        OrderIn orderIn = new OrderIn(UUID.randomUUID().toString(), UUID.randomUUID().toString(), Item.QDC_A105_Pro01, "Minnie", Instant.now());
+        OrderIn orderIn = new OrderIn(UUID.randomUUID().toString(), UUID.randomUUID().toString(), Item.QDC_A105_Pro01, "Minnie");
 
         Qdca10proResult result = Qdca10pro.make(orderIn);
 
