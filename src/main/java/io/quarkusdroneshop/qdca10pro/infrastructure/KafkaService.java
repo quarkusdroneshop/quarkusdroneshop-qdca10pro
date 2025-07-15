@@ -2,7 +2,6 @@ package io.quarkusdroneshop.qdca10pro.infrastructure;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
 import io.quarkusdroneshop.qdca10pro.domain.Qdca10pro;
-import io.quarkusdroneshop.qdca10pro.domain.exceptions.EightySixException;
 import io.quarkusdroneshop.qdca10pro.domain.valueobjects.OrderIn;
 import io.quarkusdroneshop.qdca10pro.domain.valueobjects.OrderUp;
 import org.eclipse.microprofile.reactive.messaging.Channel;
@@ -33,20 +32,35 @@ public class KafkaService {
     Emitter<String> eightySixEmitter;
 
     @Incoming("qdca10pro-in")
-    
     public CompletableFuture<Void> onOrderInPro(final OrderIn orderIn) {
-    
+
         logger.debug("OrderTicket (pro) received: {}", orderIn);
-    
+
         return CompletableFuture
             .supplyAsync(new Qdca10proTask(Qdca10pro, orderIn))
             .thenAccept(result -> {
-    
+
                 if (result.isEightySixed()) {
-                    eightySixEmitter.send(orderIn.getItem().toString());
+                    logger.debug("Item is eighty-sixed (pro), sending to topic: {}", orderIn.getItem());
+                    eightySixEmitter.send(orderIn.getItem().toString())
+                        .whenComplete((res, ex) -> {
+                            if (ex != null) {
+                                logger.error("Failed to send to eighty-six-out topic (pro)", ex);
+                            } else {
+                                logger.debug("Sent to eighty-six-out topic (pro) successfully");
+                            }
+                        });
                 } else {
-                    logger.debug("OrderUp (pro): {}", result.getOrderUp());
-                    orderUpEmitter.send(result.getOrderUp());
+                    OrderUp orderUp = result.getOrderUp();
+                    logger.debug("OrderUp (pro): {}", orderUp);
+                    orderUpEmitter.send(orderUp)
+                        .whenComplete((res, ex) -> {
+                            if (ex != null) {
+                                logger.error("Failed to send OrderUp (pro) to Kafka", ex);
+                            } else {
+                                logger.debug("OrderUp (pro) sent successfully to Kafka");
+                            }
+                        });
                 }
             });
     }
