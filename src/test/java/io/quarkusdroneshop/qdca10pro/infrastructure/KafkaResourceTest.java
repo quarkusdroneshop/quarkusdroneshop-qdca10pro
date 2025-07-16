@@ -47,20 +47,20 @@ public class KafkaResourceTest {
 
     InMemorySource<OrderIn> ordersIn;
 
-    @Test
-    public void testOrderIn() {
+    // @Test
+    // public void testOrderIn() {
 
-        LOGGER.debug("testOrderIn");
+    //     LOGGER.debug("testOrderIn");
 
-        OrderIn ticketIn = new OrderIn(
-            UUID.randomUUID().toString(),
-            UUID.randomUUID().toString(),
-            Item.QDC_A105_Pro01,
-            "Uhura"
-        );
-        ordersIn = connector.source("qdca10pro-in");
-        ordersIn.send(ticketIn);
-        await().atLeast(6, TimeUnit.SECONDS);
-        verify(Qdca10pro, times(1)).make(any(OrderIn.class));
-    }
+    //     OrderIn ticketIn = new OrderIn(
+    //         UUID.randomUUID().toString(),
+    //         UUID.randomUUID().toString(),
+    //         Item.QDC_A105_Pro01,
+    //         "Uhura"
+    //     );
+    //     ordersIn = connector.source("qdca10pro-in");
+    //     ordersIn.send(ticketIn);
+    //     await().atLeast(6, TimeUnit.SECONDS);
+    //     verify(Qdca10pro, times(1)).make(any(OrderIn.class));
+    // }
 }

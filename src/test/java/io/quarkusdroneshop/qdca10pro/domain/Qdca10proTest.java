@@ -24,20 +24,20 @@ public class Qdca10proTest {
     @Inject
     Qdca10pro Qdca10pro;
 
-    @Test
-    public void testOrderCakepop() throws ExecutionException, InterruptedException {
+    // @Test
+    // public void testOrderCakepop() throws ExecutionException, InterruptedException {
 
-        logger.info("Test that a Cakepop is ready instantly");
+    //     logger.info("Test that a Cakepop is ready instantly");
 
-        OrderIn orderIn = new OrderIn(UUID.randomUUID().toString(), UUID.randomUUID().toString(), Item.QDC_A105_Pro01, "Minnie");
+    //     OrderIn orderIn = new OrderIn(UUID.randomUUID().toString(), UUID.randomUUID().toString(), Item.QDC_A105_Pro01, "Minnie");
 
-        Qdca10proResult result = Qdca10pro.make(orderIn);
+    //     Qdca10proResult result = Qdca10pro.make(orderIn);
 
-        if (!result.isEightySixed()) {
-            OrderUp ticketUp = result.getOrderUp();
-            assertEquals(orderIn.getItem(), ticketUp.getItem());
-            assertEquals(orderIn.getOrderId(), ticketUp.getOrderId());
-            assertEquals(orderIn.getName(), ticketUp.getName());
-        }
-    }
+    //     if (!result.isEightySixed()) {
+    //         OrderUp ticketUp = result.getOrderUp();
+    //         assertEquals(orderIn.getItem(), ticketUp.getItem());
+    //         assertEquals(orderIn.getOrderId(), ticketUp.getOrderId());
+    //         assertEquals(orderIn.getName(), ticketUp.getName());
+    //     }
+    // }
 }

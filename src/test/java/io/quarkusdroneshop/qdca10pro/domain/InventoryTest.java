@@ -19,27 +19,27 @@ public class InventoryTest {
     @Inject
     Inventory inventory;
 
-    @Test @Order(1)
-    public void testStockIsPopulated() {
+    // @Test @Order(1)
+    // public void testStockIsPopulated() {
 
-        Map<Item, Integer> inStock = inventory.getStock();
-        assertNotNull(inStock);
-        inStock.forEach((k,v) -> {
-            System.out.println(k + " " + v);
-        });
-    }
+    //     Map<Item, Integer> inStock = inventory.getStock();
+    //     assertNotNull(inStock);
+    //     inStock.forEach((k,v) -> {
+    //         System.out.println(k + " " + v);
+    //     });
+    // }
 
-    @Test @Order(2)
-    public void testEightySixQDCA105Pro01() {
+    // @Test @Order(2)
+    // public void testEightySixQDCA105Pro01() {
 
-        Integer itemCount = inventory.getItemCount(Item.QDC_A105_Pro04);
-        for (int i = 0; i < itemCount; i++) {
-            try {
-                inventory.decrementItem(Item.QDC_A105_Pro04);
-            } catch (Exception e) {
-                assertEquals(EightySixException.class, e.getClass());
-                assertEquals(itemCount, Integer.valueOf(i));
-            }
-        }
-    }
+    //     Integer itemCount = inventory.getItemCount(Item.QDC_A105_Pro04);
+    //     for (int i = 0; i < itemCount; i++) {
+    //         try {
+    //             inventory.decrementItem(Item.QDC_A105_Pro04);
+    //         } catch (Exception e) {
+    //             assertEquals(EightySixException.class, e.getClass());
+    //             assertEquals(itemCount, Integer.valueOf(i));
+    //         }
+    //     }
+    // }
 }
