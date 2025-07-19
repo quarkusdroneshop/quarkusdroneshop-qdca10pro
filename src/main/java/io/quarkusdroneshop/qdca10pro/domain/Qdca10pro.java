@@ -14,6 +14,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.util.UUID;
 
 @ApplicationScoped
 public class Qdca10pro {
@@ -28,7 +29,7 @@ public class Qdca10pro {
     @PostConstruct
     void setHostName() {
         try {
-            madeBy = InetAddress.getLocalHost().getHostName();
+            madeBy = InetAddress.getLocalHost().getHostName() + "-" + UUID.randomUUID().toString().replace("-", "").substring(0, 16);
         } catch (IOException e) {
             logger.debug("unable to get hostname");
             madeBy = "unknown";
