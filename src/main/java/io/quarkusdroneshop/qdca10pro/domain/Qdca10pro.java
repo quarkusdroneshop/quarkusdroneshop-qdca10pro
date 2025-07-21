@@ -24,21 +24,22 @@ public class Qdca10pro {
     @Inject
     Inventory inventory;
 
-    private String madeBy = "";
+    //private String madeBy = "";
 
-    @PostConstruct
-    void setHostName() {
-        try {
-            madeBy = InetAddress.getLocalHost().getHostName() + "-" + UUID.randomUUID().toString().replace("-", "").substring(0, 16);
-        } catch (IOException e) {
-            logger.debug("unable to get hostname");
-            madeBy = "unknown";
-        }
-    }
+    // @PostConstruct
+    // void setHostName() {
+    //     try {
+    //         madeBy = InetAddress.getLocalHost().getHostName() + "-" + UUID.randomUUID().toString().replace("-", "").substring(0, 16);
+    //     } catch (IOException e) {
+    //         logger.debug("unable to get hostname");
+    //         madeBy = "unknown";
+    //     }
+    // }
 
     public Qdca10proResult make(final OrderIn ticketIn){
 
         logger.debug("making: {}", ticketIn.getItem());
+
         int delay = calculateDelay(ticketIn);
         
         try {
@@ -55,6 +56,8 @@ public class Qdca10pro {
  */
     private OrderUp prepare(final OrderIn ticketIn, int seconds) {
 
+        String madeBy;
+        
         // decrement the item in inventory
         try {
 
@@ -64,6 +67,13 @@ public class Qdca10pro {
 
             logger.debug(ticketIn.getItem() + " is 86'd");
             throw new EightySixException(ticketIn.getItem());
+        }
+
+        try {
+            madeBy = InetAddress.getLocalHost().getHostName() + "-" + UUID.randomUUID().toString().replace("-", "").substring(0, 16);
+        } catch (IOException e) {
+            logger.debug("unable to get hostname");
+            madeBy = "unknown";
         }
 
         // model the qdca10's time making the drink
