@@ -1,0 +1,13 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: quarkusdroneshop-qdca10pro
+  description: QDCA10Proシリーズのマイクロサービスです
+  labels:
+    app: qdca10pro
+  annotations:
+    github.com/project-slug: quarkusdroneshop/qdca10
+spec:
+  type: website
+  owner: user:default/nmushino
+  lifecycle: production
