@@ -7,39 +7,49 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
-@QuarkusTest @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@QuarkusTest
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class InventoryTest {
 
     @Inject
     Inventory inventory;
 
-    // @Test @Order(1)
-    // public void testStockIsPopulated() {
+    @Test @Order(1)
+    public void testStockIsPopulated() {
+        Map<Item, Integer> inStock = inventory.getStock();
+        assertNotNull(inStock);
+        assertFalse(inStock.isEmpty());
+    }
 
-    //     Map<Item, Integer> inStock = inventory.getStock();
-    //     assertNotNull(inStock);
-    //     inStock.forEach((k,v) -> {
-    //         System.out.println(k + " " + v);
-    //     });
-    // }
+    @Test @Order(2)
+    public void testGetItemCount() {
+        Integer count = inventory.getItemCount(Item.QDC_A105_Pro01);
+        assertNotNull(count);
+        assertTrue(count >= 0);
+    }
 
-    // @Test @Order(2)
-    // public void testEightySixQDCA105Pro01() {
+    @Test @Order(3)
+    public void testDecrementItem_success() throws EightySixException {
+        Integer before = inventory.getItemCount(Item.QDC_A105_Pro02);
+        assertNotNull(before);
+        assertTrue(before > 0);
+        inventory.decrementItem(Item.QDC_A105_Pro02);
+        Integer after = inventory.getItemCount(Item.QDC_A105_Pro02);
+        assertEquals(before - 1, after);
+    }
 
-    //     Integer itemCount = inventory.getItemCount(Item.QDC_A105_Pro04);
-    //     for (int i = 0; i < itemCount; i++) {
-    //         try {
-    //             inventory.decrementItem(Item.QDC_A105_Pro04);
-    //         } catch (Exception e) {
-    //             assertEquals(EightySixException.class, e.getClass());
-    //             assertEquals(itemCount, Integer.valueOf(i));
-    //         }
-    //     }
-    // }
+    @Test @Order(4)
+    public void testDecrementItem_throwsEightySixException() {
+        Integer count = inventory.getItemCount(Item.QDC_A105_Pro04);
+        if (count == null) count = 0;
+        for (int i = 0; i < count; i++) {
+            try { inventory.decrementItem(Item.QDC_A105_Pro04); } catch (EightySixException ignored) {}
+        }
+        assertThrows(EightySixException.class, () -> inventory.decrementItem(Item.QDC_A105_Pro04));
+    }
 }

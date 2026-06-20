@@ -2,42 +2,79 @@ package io.quarkusdroneshop.qdca10pro.domain;
 
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkusdroneshop.qdca10pro.domain.valueobjects.OrderIn;
-import io.quarkusdroneshop.qdca10pro.domain.valueobjects.OrderUp;
 import io.quarkusdroneshop.qdca10pro.domain.valueobjects.Qdca10proResult;
-import io.quarkusdroneshop.qdca10pro.domain.Qdca10pro;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
-import javax.inject.Inject;
-import java.time.Instant;
+import jakarta.inject.Inject;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.logging.Logger;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Qdca10pro.make() の全分岐 (calculateDelay + 86 パス) をカバーする
+ */
 @QuarkusTest
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class Qdca10proTest {
 
-    static final Logger logger = Logger.getLogger(Qdca10proTest.class.getName());
+    @Inject
+    Qdca10pro qdca10pro;
 
     @Inject
-    Qdca10pro Qdca10pro;
+    Inventory inventory;
 
-    // @Test
-    // public void testOrderCakepop() throws ExecutionException, InterruptedException {
+    private OrderIn makeOrder(Item item) {
+        return new OrderIn(
+                UUID.randomUUID().toString(),
+                UUID.randomUUID().toString(),
+                item,
+                "pro-test-" + item.name());
+    }
 
-    //     logger.info("Test that a Cakepop is ready instantly");
+    @Test @Order(1)
+    public void testMake_QDC_A105_Pro01() {
+        // delay = 5s
+        Qdca10proResult result = qdca10pro.make(makeOrder(Item.QDC_A105_Pro01));
+        assertFalse(result.isEightySixed());
+        assertNotNull(result.getOrderUp());
+        assertEquals(Item.QDC_A105_Pro01, result.getOrderUp().getItem());
+    }
 
-    //     OrderIn orderIn = new OrderIn(UUID.randomUUID().toString(), UUID.randomUUID().toString(), Item.QDC_A105_Pro01, "Minnie");
+    @Test @Order(2)
+    public void testMake_QDC_A105_Pro02() {
+        // delay = 3s
+        Qdca10proResult result = qdca10pro.make(makeOrder(Item.QDC_A105_Pro02));
+        assertFalse(result.isEightySixed());
+        assertNotNull(result.getOrderUp());
+    }
 
-    //     Qdca10proResult result = Qdca10pro.make(orderIn);
+    @Test @Order(3)
+    public void testMake_QDC_A105_Pro03() {
+        // delay = 5s
+        Qdca10proResult result = qdca10pro.make(makeOrder(Item.QDC_A105_Pro03));
+        assertFalse(result.isEightySixed());
+        assertNotNull(result.getOrderUp());
+    }
 
-    //     if (!result.isEightySixed()) {
-    //         OrderUp ticketUp = result.getOrderUp();
-    //         assertEquals(orderIn.getItem(), ticketUp.getItem());
-    //         assertEquals(orderIn.getOrderId(), ticketUp.getOrderId());
-    //         assertEquals(orderIn.getName(), ticketUp.getName());
-    //     }
-    // }
+    @Test @Order(4)
+    public void testMake_QDC_A105_Pro04() {
+        // delay = 7s
+        Qdca10proResult result = qdca10pro.make(makeOrder(Item.QDC_A105_Pro04));
+        assertFalse(result.isEightySixed());
+        assertNotNull(result.getOrderUp());
+    }
+
+    @Test @Order(5)
+    public void testMake_eightySix_path() {
+        // 在庫を枯渇させて 86 パスを確認 (sleepなし)
+        Integer count = inventory.getItemCount(Item.QDC_A105_Pro01);
+        if (count == null) count = 0;
+        for (int i = 0; i < count; i++) {
+            try { inventory.decrementItem(Item.QDC_A105_Pro01); } catch (Exception ignored) {}
+        }
+        Qdca10proResult result = qdca10pro.make(makeOrder(Item.QDC_A105_Pro01));
+        assertTrue(result.isEightySixed());
+        assertNotNull(result.getEightySixEvent());
+        assertNull(result.getOrderUp());
+    }
 }
