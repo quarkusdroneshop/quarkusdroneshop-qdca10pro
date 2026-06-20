@@ -9,9 +9,8 @@ import io.quarkusdroneshop.qdca10pro.domain.Qdca10pro;
 import io.quarkusdroneshop.qdca10pro.domain.valueobjects.OrderIn;
 import io.quarkusdroneshop.qdca10pro.testing.KafkaTestProfile;
 import io.quarkusdroneshop.qdca10pro.testing.KafkaTestResource;
-import io.smallrye.reactive.messaging.connectors.InMemoryConnector;
-import io.smallrye.reactive.messaging.connectors.InMemorySource;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
+import io.smallrye.reactive.messaging.memory.InMemoryConnector;
+import io.smallrye.reactive.messaging.memory.InMemorySource;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,9 +33,6 @@ import static org.mockito.Mockito.verify;
 public class KafkaResourceTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(KafkaResourceTest.class);
-
-    @ConfigProperty(name = "mp.messaging.incoming.qdca10pro-in.topic")
-    protected String Qdca10pro_in;
 
     @InjectSpy
     Qdca10pro Qdca10pro;

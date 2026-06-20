@@ -6,7 +6,6 @@
   <artifactId>quarkusdroneshop-qdca10pro</artifactId>
   <version>5.2.0</version>
   <properties>
-    <awaitility.version>4.0.2</awaitility.version>
     <compiler-plugin.version>3.8.1</compiler-plugin.version>
     <maven.compiler.parameters>true</maven.compiler.parameters>
     <maven.compiler.source>21</maven.compiler.source>
@@ -17,7 +16,6 @@
     <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
     <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
     <quarkus.platform.version>3.33.2</quarkus.platform.version>
-    <smallrye-reactive-messaging-in-memory.version>2.1.0</smallrye-reactive-messaging-in-memory.version>
     <surefire-plugin.version>3.5.6</surefire-plugin.version>
   </properties>
   <dependencyManagement>
@@ -58,7 +56,6 @@
     <dependency>
       <groupId>org.awaitility</groupId>
       <artifactId>awaitility</artifactId>
-      <version>${awaitility.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -80,7 +77,6 @@
     <dependency>
       <groupId>io.smallrye.reactive</groupId>
       <artifactId>smallrye-reactive-messaging-in-memory</artifactId>
-      <version>${smallrye-reactive-messaging-in-memory.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -180,6 +176,7 @@
               <arguments>
                 <argument>${project.basedir}/src/test/scripts/generate-report.py</argument>
                 <argument>${project.build.directory}</argument>
+                <argument>${project.artifactId}</argument>
               </arguments>
             </configuration>
           </execution>

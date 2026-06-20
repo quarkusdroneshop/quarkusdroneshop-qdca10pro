@@ -7,6 +7,7 @@ import org.junit.jupiter.api.*;
 
 import jakarta.inject.Inject;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -22,6 +23,11 @@ public class Qdca10proTest {
 
     @Inject
     Inventory inventory;
+
+    @BeforeEach
+    public void restoreInventory() {
+        Stream.of(Item.values()).forEach(item -> inventory.restockItem(item, 10));
+    }
 
     private OrderIn makeOrder(Item item) {
         return new OrderIn(

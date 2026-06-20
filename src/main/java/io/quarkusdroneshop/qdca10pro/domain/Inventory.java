@@ -39,6 +39,10 @@ public class Inventory {
         stock.replace(item, currentValue - 1);
     }
 
+    public void restockItem(Item item, int quantity) {
+        stock.put(item, quantity);
+    }
+
     public Integer getItemCount(Item item) {
         return stock.get(item);
     }
