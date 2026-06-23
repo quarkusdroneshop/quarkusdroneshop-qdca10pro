@@ -13,6 +13,10 @@ metadata:
     backstage.io/kubernetes-id: quarkusdroneshop-qdca10pro
     backstage.io/kubernetes-cluster: b-cluster
     backstage.io/kubernetes-label-selector: app.kubernetes.io/instance=qdca10pro
+    tektonci.io/pipeline: build-and-push-quarkusdroneshop-qdca10pro
+    tektonci.io/pipelineNamespace: quarkusdroneshop-cicd
+    tekton.dev/cicd: "true"
+    janus-idp.io/tekton: "true"
 spec:
   type: microservice
   owner: user:default/nmushino
