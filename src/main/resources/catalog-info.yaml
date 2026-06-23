@@ -3,11 +3,26 @@ kind: Component
 metadata:
   name: quarkusdroneshop-qdca10pro
   description: QDCA10Proシリーズのマイクロサービスです
+  tags:
+    - latest
+    - b-cluster
   labels:
     app: qdca10pro
   annotations:
     github.com/project-slug: quarkusdroneshop/qdca10
+    backstage.io/kubernetes-id: quarkusdroneshop-qdca10pro
+    backstage.io/kubernetes-cluster: b-cluster
+    backstage.io/kubernetes-label-selector: app.kubernetes.io/instance=quarkusdroneshop-qdca10pro
 spec:
   type: website
   owner: user:default/nmushino
   lifecycle: production
+  system: b-cluster
+  dependsOn:
+    - resource:shop-cluster-kafka
+    - resource:shop-asite-qdca10pro-in
+  consumesApis:
+    - quarkusdroneshop-qdca10pro-orders-in
+  providesApis:
+    - quarkusdroneshop-qdca10pro-orders-up
+    - quarkusdroneshop-qdca10pro-eighty-six
