@@ -12,7 +12,8 @@ metadata:
     github.com/project-slug: quarkusdroneshop/qdca10
     backstage.io/kubernetes-id: quarkusdroneshop-qdca10pro
     backstage.io/kubernetes-cluster: b-cluster
-    backstage.io/kubernetes-label-selector: app.kubernetes.io/instance=quarkusdroneshop-qdca10pro
+    backstage.io/kubernetes-namespace: quarkusdroneshop-demo
+    backstage.io/kubernetes-label-selector: app.kubernetes.io/instance=qdca10pro
 spec:
   type: microservice
   owner: user:default/nmushino
