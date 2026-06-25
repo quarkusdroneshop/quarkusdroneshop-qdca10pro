@@ -1,0 +1,6 @@
+site_name: 'QDCA10Pro Microservice'
+docs_dir: docs
+nav:
+  - ホーム: index.md
+plugins:
+  - techdocs-core
