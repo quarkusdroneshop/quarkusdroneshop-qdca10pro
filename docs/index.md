@@ -1,53 +1,125 @@
-# Docs
-Please see the Github Pages Site for complete documentation: [quarkusdroneshop.github.io](https://quarkusdroneshop.github.io)
+# QDCA10Pro マイクロサービス
 
-# About 
-This repo contains the QDCA10Pro microservice which is responsible for making drinks.  The QDCA10Pro microservice listens on a Kafka topic for incoming orders, applies the business logic for making an order, and then sends an update on another Kafka topic.
+## 概要
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.  If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
+QDCA10Pro はドローンショップの **ドローンB 製造マイクロサービス** です。
 
-## Local deveplomnent steps 
+- Counter から Kafka 経由で製造指示を受信
+- ドローンBの製造ビジネスロジックを実行（QDCA10 より高性能モデル）
+- 製造完了後、Counter へ完了通知を送信
 
-This project requires Kafka.  The quarkusdroneshop-support project contains a Docker compose file that will start Kafka.
+**フレームワーク**: Quarkus  
+**デプロイ先クラスター**: b-cluster
 
-```
-https://github.com/quarkusdroneshop/quarkusdroneshop-support.git
-https://github.com/quarkusdroneshop/quarkusdroneshop-qdca10pro.git
-```
+---
 
-From inside the quarkusdroneshop-support folder run:
+## アーキテクチャ
 
 ```
-docker compose up
+Counter（a-cluster）
+        │
+        ▼ Kafka: qdca10pro-in（MirrorMaker2 経由）
+┌─────────────────┐
+│   QDCA10Pro     │ ── 製造ビジネスロジック実行
+│                 │
+│                 │──► Kafka: orders-up（製造完了通知）
+└─────────────────┘
+                        │
+                        ▼ MirrorMaker2
+                Counter（a-cluster）
 ```
 
-From inside the quarkusdroneshop-qdca10pro folder run:
+### Kafka トピック一覧
+
+| トピック | 方向 | 説明 |
+|---------|------|------|
+| `qdca10pro-in` | 受信 | Counter からの製造指示 |
+| `orders-up` | 送信 | 製造完了通知 |
+
+### メッセージ形式（OrderTicket）
+
+```json
+{
+  "orderId": "uuid",
+  "item": "DRONE_B",
+  "preparedBy": "QDCA10Pro"
+}
 ```
-./mvnw quarkus:dev
-```
 
-## Packaging the application
+---
 
-The application is packageable using `./mvnw package`.
-It produces the executable `quarkusdroneshop-qdca10pro-1.0-SNAPSHOT-runner.jar` file in `/target` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/lib` directory.
+## ローカル開発
 
-The application is now runnable using `java -jar target/quarkusdroneshop-qdca10pro-1.0-SNAPSHOT-runner.jar`.
+### 前提条件
 
-## Creating a native executable
+- Java 17+
+- Docker / Docker Compose
 
-You can create a native executable using: `./mvnw package -Pnative`.
-
-Or you can use Docker to build the native executable using: `./mvnw package -Pnative -Dquarkus.native.container-build=true`.
-
-You can then execute your binary: `./target/quarkusdroneshop-qdca10pro-1.0-SNAPSHOT-runner`
-
-If you want to learn more about building native executables, please consult https://quarkus.io/guides/building-native-image-guide .
-
-## Running with Docker
-
-Quarkus' configuration can be environment specific: https://quarkus.io/guides/config
+### 1. インフラ起動
 
 ```shell
-docker run -i --network="host" quarkusdroneshop-qdca10pro/quarkus-shop-QDCA10Pro:latest
+git clone https://github.com/quarkusdroneshop/quarkusdroneshop-support.git
+cd quarkusdroneshop-support
+docker compose up -d
 ```
+
+### 2. アプリケーション起動
+
+```shell
+git clone https://github.com/quarkusdroneshop/quarkusdroneshop-qdca10pro.git
+cd quarkusdroneshop-qdca10pro
+./mvnw clean compile quarkus:dev
+```
+
+### 3. テストメッセージ送信
+
+```shell
+kafka-console-producer --broker-list localhost:9092 --topic qdca10pro-in
+> {"orderId":"test-001","item":"DRONE_B","quantity":1}
+```
+
+### 環境変数
+
+| 変数名 | デフォルト | 説明 |
+|--------|-----------|------|
+| `KAFKA_BOOTSTRAP_URLS` | `localhost:9092` | Kafka ブートストラップアドレス |
+
+---
+
+## 本番デプロイ（Tekton Pipeline）
+
+### パイプライン概要
+
+```
+fetch-repository → semgrep-scan → maven-run → push-oc-apps
+```
+
+### 手動実行
+
+```shell
+tkn pipeline start build-and-push-quarkusdroneshop-qdca10pro \
+  -n quarkusdroneshop-cicd \
+  --use-param-defaults
+```
+
+RHDH の **CI タブ** からパイプライン実行状況を確認できます。
+
+---
+
+## テスト
+
+```shell
+# ユニットテスト
+./mvnw test
+
+# 統合テスト
+./mvnw verify
+```
+
+---
+
+## 注意事項
+
+- **QDCA10 との違い**: QDCA10 はドローンA、QDCA10Pro はドローンBを製造。Pro モデルは追加の品質チェックステップがあります。
+- **クラスター間 Kafka**: `qdca10pro-in` は a-cluster の Kafka から MirrorMaker2 でミラーリング。
+- **スケーリング**: 注文量に応じて b-cluster でのレプリカ数を調整してください。
