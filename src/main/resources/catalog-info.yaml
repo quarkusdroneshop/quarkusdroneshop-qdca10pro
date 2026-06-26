@@ -27,15 +27,15 @@ spec:
     - resource:shop-cluster-kafka
     - resource:shop-asite-qdca10pro-in
   consumesApis:
-    - kafka-shop-asite-qdca10pro-in
+    - kafka-bsite-qdca10pro-in
   providesApis:
-    - kafka-orders-up
-    - kafka-eighty-six
+    - kafka-bsite-orders-up
+    - kafka-bsite-eighty-six
 ---
 apiVersion: backstage.io/v1alpha1
 kind: API
 metadata:
-  name: kafka-shop-asite-qdca10pro-in
+  name: kafka-bsite-qdca10pro-in
   description: "Kafka トピック: shop-asite.qdca10pro-in（QDCA10Pro注文チケット受信）"
   annotations:
     backstage.io/kubernetes-cluster: b-cluster
