@@ -24,7 +24,7 @@ spec:
   lifecycle: production
   system: b-cluster
   dependsOn:
-    - resource:shop-cluster-kafka
+    - resource:shop-cluster-kafka-bsite
     - resource:shop-asite-qdca10pro-in
   consumesApis:
     - kafka-bsite-qdca10pro-in
