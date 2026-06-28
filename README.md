@@ -1,53 +1,62 @@
-# Docs
-Please see the Github Pages Site for complete documentation: [quarkusdroneshop.github.io](https://quarkusdroneshop.github.io)
+# quarkusdroneshop-qdca10pro
 
-# About 
-This repo contains the QDCA10Pro microservice which is responsible for making drinks.  The QDCA10Pro microservice listens on a Kafka topic for incoming orders, applies the business logic for making an order, and then sends an update on another Kafka topic.
+Quarkus ベースのドリンク製造マイクロサービス (QDCA10Pro モデル)。QDCA10 と同様のロールを持ちますが、Pro グレードのドリンク (エスプレッソ系) を担当します。
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.  If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
-
-## Local deveplomnent steps 
-
-This project requires Kafka.  The quarkusdroneshop-support project contains a Docker compose file that will start Kafka.
+## アーキテクチャ
 
 ```
-https://github.com/quarkusdroneshop/quarkusdroneshop-support.git
-https://github.com/quarkusdroneshop/quarkusdroneshop-qdca10pro.git
+quarkusdroneshop-counter
+    │  qdca10pro-in (dev) / shop-asite.qdca10pro-in (prod) ──▶
+    ▼
+quarkusdroneshop-qdca10pro
+    │
+    ├──▶ orders-up        (製造完了通知 → counter)
+    └──▶ eighty-six       (在庫切れ通知)
 ```
 
-From inside the quarkusdroneshop-support folder run:
+## Kafka トピック
 
-```
+| チャネル | dev トピック | prod トピック | 方向 |
+|---|---|---|---|
+| orders-in | `qdca10pro-in` | `shop-asite.qdca10pro-in` | 受信 |
+| orders-up | `orders-up` | `orders-up` | 送信 |
+| eighty-six | `eighty-six` | `eighty-six` | 送信 |
+
+## ローカル開発
+
+```shell
+git clone https://github.com/quarkusdroneshop/quarkusdroneshop-support.git
+cd quarkusdroneshop-support
 docker compose up
-```
 
-From inside the quarkusdroneshop-qdca10pro folder run:
-```
+cd ../quarkusdroneshop-qdca10pro
 ./mvnw quarkus:dev
 ```
 
-## Packaging the application
+## 環境変数 (本番)
 
-The application is packageable using `./mvnw package`.
-It produces the executable `quarkusdroneshop-qdca10pro-1.0-SNAPSHOT-runner.jar` file in `/target` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/lib` directory.
+| 変数名 | 説明 |
+|---|---|
+| `KAFKA_BOOTSTRAP_URLS` | Kafka ブローカー URL |
 
-The application is now runnable using `java -jar target/quarkusdroneshop-qdca10pro-1.0-SNAPSHOT-runner.jar`.
-
-## Creating a native executable
-
-You can create a native executable using: `./mvnw package -Pnative`.
-
-Or you can use Docker to build the native executable using: `./mvnw package -Pnative -Dquarkus.native.container-build=true`.
-
-You can then execute your binary: `./target/quarkusdroneshop-qdca10pro-1.0-SNAPSHOT-runner`
-
-If you want to learn more about building native executables, please consult https://quarkus.io/guides/building-native-image-guide .
-
-## Running with Docker
-
-Quarkus' configuration can be environment specific: https://quarkus.io/guides/config
+## パッケージング
 
 ```shell
-docker run -i --network="host" quarkusdroneshop-qdca10pro/quarkus-shop-QDCA10Pro:latest
+# JVM モード
+./mvnw package
+java -jar target/quarkusdroneshop-qdca10pro-1.0-SNAPSHOT-runner.jar
+
+# ネイティブビルド
+./mvnw package -Pnative -Dquarkus.native.container-build=true
+./target/quarkusdroneshop-qdca10pro-1.0-SNAPSHOT-runner
+
+# Docker 実行
+docker run -i --network="host" \
+  -e KAFKA_BOOTSTRAP_URLS=localhost:9092 \
+  quarkusdroneshop-qdca10pro/quarkus-shop-QDCA10Pro:latest
 ```
+
+## 参考
+
+- [Quarkus](https://quarkus.io/)
+- [quarkusdroneshop.github.io](https://quarkusdroneshop.github.io)
