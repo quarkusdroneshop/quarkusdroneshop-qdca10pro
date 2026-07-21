@@ -23,6 +23,12 @@ public class Inventory {
         stock.put(item, currentValue - 1);
     }
 
+    // component-stock-decrement で下流 (在庫サービス) へ実消費を反映できるよう、
+    // 減算後の絶対数を呼び出し側 (KafkaService) へ返す。
+    public synchronized Integer getItemCountOrNull(Item item) {
+        return stock.get(item);
+    }
+
     // drone-component-stock からの補充完了通知 (item 単位の絶対数, upsert) を
     // 受信するたびに呼ばれる。直近の値でそのまま置き換える。
     public synchronized void restockItem(Item item, int quantity) {

@@ -3,6 +3,7 @@ package io.quarkusdroneshop.qdca10pro.infrastructure;
 import io.quarkus.runtime.annotations.RegisterForReflection;
 import io.quarkusdroneshop.qdca10pro.domain.Inventory;
 import io.quarkusdroneshop.qdca10pro.domain.Qdca10pro;
+import io.quarkusdroneshop.qdca10pro.domain.valueobjects.ComponentStockDecrement;
 import io.quarkusdroneshop.qdca10pro.domain.valueobjects.ComponentStockUpdate;
 import io.quarkusdroneshop.qdca10pro.domain.valueobjects.EightySixMessage;
 import io.quarkusdroneshop.qdca10pro.domain.valueobjects.OrderIn;
@@ -37,6 +38,10 @@ public class KafkaService {
     @Inject
     @Channel("eighty-six")
     Emitter<EightySixMessage> eightySixEmitter;
+
+    @Inject
+    @Channel("component-stock-decrement")
+    Emitter<ComponentStockDecrement> componentStockDecrementEmitter;
 
     @Incoming("component-stock-quantity")
     public void onComponentStockUpdate(final ComponentStockUpdate update) {
@@ -84,6 +89,16 @@ public class KafkaService {
                                 logger.debug("OrderUp sent successfully to Kafka");
                             }
                         });
+
+                    Integer remaining = inventory.getItemCountOrNull(orderIn.getItem());
+                    if (remaining != null) {
+                        componentStockDecrementEmitter.send(new ComponentStockDecrement(orderIn.getItem(), remaining))
+                            .whenComplete((res, ex) -> {
+                                if (ex != null) {
+                                    logger.error("Failed to send ComponentStockDecrement to Kafka", ex);
+                                }
+                            });
+                    }
                 }
             });
     }
