@@ -4,6 +4,7 @@ import io.quarkus.runtime.annotations.RegisterForReflection;
 import io.quarkusdroneshop.qdca10pro.domain.Inventory;
 import io.quarkusdroneshop.qdca10pro.domain.Qdca10pro;
 import io.quarkusdroneshop.qdca10pro.domain.valueobjects.ComponentStockUpdate;
+import io.quarkusdroneshop.qdca10pro.domain.valueobjects.EightySixMessage;
 import io.quarkusdroneshop.qdca10pro.domain.valueobjects.OrderIn;
 import io.quarkusdroneshop.qdca10pro.domain.valueobjects.OrderUp;
 
@@ -35,7 +36,7 @@ public class KafkaService {
 
     @Inject
     @Channel("eighty-six")
-    Emitter<String> eightySixEmitter;
+    Emitter<EightySixMessage> eightySixEmitter;
 
     @Incoming("component-stock-quantity")
     public void onComponentStockUpdate(final ComponentStockUpdate update) {
@@ -64,7 +65,7 @@ public class KafkaService {
             .thenAccept(result -> {
                 if (result.isEightySixed()) {
                     logger.debug("Item is eighty-sixed, sending to topic: {}", orderIn.getItem());
-                    eightySixEmitter.send(orderIn.getItem().toString())
+                    eightySixEmitter.send(new EightySixMessage(orderIn.getOrderId(), orderIn.getLineItemId(), orderIn.getItem()))
                         .whenComplete((res, ex) -> {
                             if (ex != null) {
                                 logger.error("Failed to send to eighty-six topic", ex);
