@@ -1,7 +1,9 @@
 package io.quarkusdroneshop.qdca10pro.infrastructure;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
+import io.quarkusdroneshop.qdca10pro.domain.Inventory;
 import io.quarkusdroneshop.qdca10pro.domain.Qdca10pro;
+import io.quarkusdroneshop.qdca10pro.domain.valueobjects.ComponentStockUpdate;
 import io.quarkusdroneshop.qdca10pro.domain.valueobjects.OrderIn;
 import io.quarkusdroneshop.qdca10pro.domain.valueobjects.OrderUp;
 
@@ -25,6 +27,9 @@ public class KafkaService {
     Qdca10pro qdca10pro;
 
     @Inject
+    Inventory inventory;
+
+    @Inject
     @Channel("orders-up")
     Emitter<OrderUp> orderUpEmitter;
 
@@ -32,8 +37,25 @@ public class KafkaService {
     @Channel("eighty-six")
     Emitter<String> eightySixEmitter;
 
+    @Incoming("component-stock-quantity")
+    public void onComponentStockUpdate(final ComponentStockUpdate update) {
+        if (update == null) {
+            return;
+        }
+        inventory.restockItem(update.getItem(), (int) update.getQuantity());
+    }
+
     @Incoming("orders-in")
     public CompletableFuture<Void> onOrderIn(final OrderIn orderIn) {
+
+        // dataproduct-order-events は QDCA10pro 以外宛ての ORDER_PLACED や、
+        // LINE_ITEM_STATUS_CHANGED / ORDER_CANCELLED も同じトピックに流れてくる。
+        // OrderEventOrderInDeserializer はそれらを null として返す (フィルタ) ため、
+        // ここで null チェックしてスキップする必要がある。
+        if (orderIn == null) {
+            logger.debug("Skipping non-QDCA10pro dataproduct-order-events message");
+            return CompletableFuture.completedFuture(null);
+        }
 
         logger.debug("OrderTicket received: {}", orderIn);
 

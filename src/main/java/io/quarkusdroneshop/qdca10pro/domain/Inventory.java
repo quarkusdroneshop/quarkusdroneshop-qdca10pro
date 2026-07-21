@@ -4,50 +4,36 @@ import io.quarkusdroneshop.qdca10pro.domain.exceptions.EightySixException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.stream.Stream;
 
 @ApplicationScoped
 public class Inventory {
 
     Logger logger = LoggerFactory.getLogger(Inventory.class.getName());
 
-    static Map<Item, Integer> stock;
+    // drone-component-stock データプロダクト (dataproduct-component-stock-quantity) から
+    // 受信するまでは在庫 0 (=売り切れ) として扱う (ランダムな初期値を捏造しない)。
+    private final Map<Item, Integer> stock = new EnumMap<>(Item.class);
 
-    public Inventory() {
-        super();
-    }
-
-    @PostConstruct
-    private void createStock() {
-        stock = new HashMap<>();
-        Stream.of(Item.values()).forEach(v ->{
-            stock.put(v, ThreadLocalRandom.current().nextInt(55,99));
-        });
-        stock.entrySet().stream().forEach(entrySet -> {
-            logger.debug(entrySet.getKey() + " " + entrySet.getValue());
-        });
-    }
-
-    public void decrementItem(Item item) throws EightySixException {
+    public synchronized void decrementItem(Item item) throws EightySixException {
         Integer currentValue = stock.get(item);
-        if(currentValue <= 0) throw new EightySixException(item);
-        stock.replace(item, currentValue - 1);
+        if (currentValue == null || currentValue <= 0) throw new EightySixException(item);
+        stock.put(item, currentValue - 1);
     }
 
-    public void restockItem(Item item, int quantity) {
+    // drone-component-stock からの補充完了通知 (item 単位の絶対数, upsert) を
+    // 受信するたびに呼ばれる。直近の値でそのまま置き換える。
+    public synchronized void restockItem(Item item, int quantity) {
         stock.put(item, quantity);
     }
 
-    public Integer getItemCount(Item item) {
-        return stock.get(item);
+    public synchronized Integer getItemCount(Item item) {
+        return stock.getOrDefault(item, 0);
     }
 
-    public Map<Item, Integer> getStock() {
-        return stock;
+    public synchronized Map<Item, Integer> getStock() {
+        return new EnumMap<>(stock);
     }
 }

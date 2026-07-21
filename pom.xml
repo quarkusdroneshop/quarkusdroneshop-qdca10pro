@@ -60,6 +60,12 @@
       <artifactId>quarkus-messaging-kafka</artifactId>
     </dependency>
 
+    <!-- dataproduct-order-events (Avro / Apicurio Service Registry) 購読用 -->
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-apicurio-registry-avro</artifactId>
+    </dependency>
+
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-smallrye-health</artifactId>
