@@ -21,6 +21,9 @@ public class InventoryTest {
 
     @Test @Order(1)
     public void testStockIsPopulated() {
+        // Inventory は drone-component-stock データから受信するまで在庫0として
+        // 扱う設計(初期値を捏造しない)のため、テスト側で明示的に補充してから検証する。
+        inventory.restockItem(Item.QDC_A105_Pro01, 5);
         Map<Item, Integer> inStock = inventory.getStock();
         assertNotNull(inStock);
         assertFalse(inStock.isEmpty());
@@ -35,6 +38,7 @@ public class InventoryTest {
 
     @Test @Order(3)
     public void testDecrementItem_success() throws EightySixException {
+        inventory.restockItem(Item.QDC_A105_Pro02, 3);
         Integer before = inventory.getItemCount(Item.QDC_A105_Pro02);
         assertNotNull(before);
         assertTrue(before > 0);
