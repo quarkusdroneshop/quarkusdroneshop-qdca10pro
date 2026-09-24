@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
  */
 public class OrderEventOrderInDeserializer implements Deserializer<OrderIn> {
 
-    private static final Logger logger = LoggerFactory.getLogger(OrderEventOrderInDeserializer.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(OrderEventOrderInDeserializer.class);
 
     private final AvroKafkaDeserializer<GenericRecord> avroDeserializer = new AvroKafkaDeserializer<>();
 
@@ -59,7 +59,7 @@ public class OrderEventOrderInDeserializer implements Deserializer<OrderIn> {
 
             return new OrderIn(orderId, lineItemId, item, name);
         } catch (Exception e) {
-            logger.warn("Failed to convert OrderEvent to OrderIn: {}", record, e);
+            LOGGER.warn("Failed to convert OrderEvent to OrderIn: {}", record, e);
             return null;
         }
     }

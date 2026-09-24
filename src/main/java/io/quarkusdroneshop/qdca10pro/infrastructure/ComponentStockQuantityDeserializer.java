@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
  */
 public class ComponentStockQuantityDeserializer implements Deserializer<ComponentStockUpdate> {
 
-    private static final Logger logger = LoggerFactory.getLogger(ComponentStockQuantityDeserializer.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ComponentStockQuantityDeserializer.class);
 
     private final AvroKafkaDeserializer<GenericRecord> avroDeserializer = new AvroKafkaDeserializer<>();
 
@@ -41,10 +41,10 @@ public class ComponentStockQuantityDeserializer implements Deserializer<Componen
             long quantity = (Long) record.get("quantity");
             return new ComponentStockUpdate(item, quantity);
         } catch (IllegalArgumentException e) {
-            logger.debug("Unknown item in component-stock-quantity record, skipping: {}", record);
+            LOGGER.debug("Unknown item in component-stock-quantity record, skipping: {}", record);
             return null;
         } catch (Exception e) {
-            logger.warn("Failed to convert component-stock-quantity record: {}", record, e);
+            LOGGER.warn("Failed to convert component-stock-quantity record: {}", record, e);
             return null;
         }
     }

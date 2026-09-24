@@ -6,9 +6,6 @@ import io.quarkusdroneshop.qdca10pro.domain.Item;
 import java.time.Instant;
 import java.util.StringJoiner;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 @RegisterForReflection
 public class OrderIn {
 
@@ -47,15 +44,27 @@ public class OrderIn {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         OrderIn ticketIn = (OrderIn) o;
 
-        if (orderId != null ? !orderId.equals(ticketIn.orderId) : ticketIn.orderId != null) return false;
-        if (lineItemId != null ? !lineItemId.equals(ticketIn.lineItemId) : ticketIn.lineItemId != null) return false;
-        if (item != ticketIn.item) return false;
-        if (name != null ? !name.equals(ticketIn.name) : ticketIn.name != null) return false;
+        if (orderId != null ? !orderId.equals(ticketIn.orderId) : ticketIn.orderId != null) {
+            return false;
+        }
+        if (lineItemId != null ? !lineItemId.equals(ticketIn.lineItemId) : ticketIn.lineItemId != null) {
+            return false;
+        }
+        if (item != ticketIn.item) {
+            return false;
+        }
+        if (name != null ? !name.equals(ticketIn.name) : ticketIn.name != null) {
+            return false;
+        }
         return timestamp != null ? timestamp.equals(ticketIn.timestamp) : ticketIn.timestamp == null;
     }
 

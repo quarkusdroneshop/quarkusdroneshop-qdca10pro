@@ -70,7 +70,8 @@ public class KafkaService {
             .thenAccept(result -> {
                 if (result.isEightySixed()) {
                     logger.debug("Item is eighty-sixed, sending to topic: {}", orderIn.getItem());
-                    eightySixEmitter.send(new EightySixMessage(orderIn.getOrderId(), orderIn.getLineItemId(), orderIn.getItem()))
+                    eightySixEmitter.send(new EightySixMessage(
+                            orderIn.getOrderId(), orderIn.getLineItemId(), orderIn.getItem()))
                         .whenComplete((res, ex) -> {
                             if (ex != null) {
                                 logger.error("Failed to send to eighty-six topic", ex);

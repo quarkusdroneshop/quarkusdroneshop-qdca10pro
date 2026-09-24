@@ -19,7 +19,9 @@ public class Inventory {
 
     public synchronized void decrementItem(Item item) throws EightySixException {
         Integer currentValue = stock.get(item);
-        if (currentValue == null || currentValue <= 0) throw new EightySixException(item);
+        if (currentValue == null || currentValue <= 0) {
+            throw new EightySixException(item);
+        }
         stock.put(item, currentValue - 1);
     }
 

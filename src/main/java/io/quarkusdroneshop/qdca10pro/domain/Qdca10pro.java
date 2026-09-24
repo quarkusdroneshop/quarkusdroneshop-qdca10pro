@@ -4,12 +4,10 @@ import io.quarkusdroneshop.qdca10pro.domain.exceptions.EightySixException;
 import io.quarkusdroneshop.qdca10pro.domain.valueobjects.OrderIn;
 import io.quarkusdroneshop.qdca10pro.domain.valueobjects.OrderUp;
 import io.quarkusdroneshop.qdca10pro.domain.valueobjects.Qdca10proResult;
-import io.quarkusdroneshop.qdca10pro.domain.EightySixEvent;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import java.io.IOException;
@@ -19,14 +17,14 @@ import java.util.UUID;
 @ApplicationScoped
 public class Qdca10pro {
 
-    static final Logger logger = LoggerFactory.getLogger(Qdca10pro.class.getName());
+    static final Logger LOGGER = LoggerFactory.getLogger(Qdca10pro.class.getName());
 
     @Inject
     Inventory inventory;
 
-    public Qdca10proResult make(final OrderIn ticketIn){
+    public Qdca10proResult make(final OrderIn ticketIn) {
 
-        logger.debug("making: {}", ticketIn.getItem());
+        LOGGER.debug("making: {}", ticketIn.getItem());
 
         int delay = calculateDelay(ticketIn);
         
@@ -50,17 +48,18 @@ public class Qdca10pro {
         try {
 
             inventory.decrementItem(ticketIn.getItem());
-            logger.debug("inventory decremented 1 {}", ticketIn.getItem());
+            LOGGER.debug("inventory decremented 1 {}", ticketIn.getItem());
         } catch (EightySixException e) {
 
-            logger.debug(ticketIn.getItem() + " is 86'd");
+            LOGGER.debug(ticketIn.getItem() + " is 86'd");
             throw new EightySixException(ticketIn.getItem());
         }
 
         try {
-            madeBy = InetAddress.getLocalHost().getHostName() + "-" + UUID.randomUUID().toString().replace("-", "").substring(0, 16);
+            madeBy = InetAddress.getLocalHost().getHostName() + "-"
+                    + UUID.randomUUID().toString().replace("-", "").substring(0, 16);
         } catch (IOException e) {
-            logger.debug("unable to get hostname");
+            LOGGER.debug("unable to get hostname");
             madeBy = "unknown";
         }
 

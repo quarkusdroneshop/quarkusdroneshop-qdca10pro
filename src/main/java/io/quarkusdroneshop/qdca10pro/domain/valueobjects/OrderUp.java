@@ -1,12 +1,9 @@
 package io.quarkusdroneshop.qdca10pro.domain.valueobjects;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
-import io.quarkusdroneshop.qdca10pro.domain.EventType;
 import io.quarkusdroneshop.qdca10pro.domain.Item;
-import io.quarkusdroneshop.qdca10pro.domain.LineItemEvent;
 
 import java.time.Instant;
-import java.util.Objects;
 import java.util.StringJoiner;
 
 @RegisterForReflection
@@ -24,7 +21,8 @@ public class OrderUp {
 
     final String madeBy;
 
-    public OrderUp(final String orderId, final String lineItemId, final Item item, final String name, final String madeBy) {
+    public OrderUp(final String orderId, final String lineItemId, final Item item, final String name,
+            final String madeBy) {
         this.orderId = orderId;
         this.lineItemId = lineItemId;
         this.item = item;
@@ -47,16 +45,30 @@ public class OrderUp {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         OrderUp ticketUp = (OrderUp) o;
 
-        if (orderId != null ? !orderId.equals(ticketUp.orderId) : ticketUp.orderId != null) return false;
-        if (lineItemId != null ? !lineItemId.equals(ticketUp.lineItemId) : ticketUp.lineItemId != null) return false;
-        if (item != ticketUp.item) return false;
-        if (name != null ? !name.equals(ticketUp.name) : ticketUp.name != null) return false;
-        if (timestamp != null ? !timestamp.equals(ticketUp.timestamp) : ticketUp.timestamp != null) return false;
+        if (orderId != null ? !orderId.equals(ticketUp.orderId) : ticketUp.orderId != null) {
+            return false;
+        }
+        if (lineItemId != null ? !lineItemId.equals(ticketUp.lineItemId) : ticketUp.lineItemId != null) {
+            return false;
+        }
+        if (item != ticketUp.item) {
+            return false;
+        }
+        if (name != null ? !name.equals(ticketUp.name) : ticketUp.name != null) {
+            return false;
+        }
+        if (timestamp != null ? !timestamp.equals(ticketUp.timestamp) : ticketUp.timestamp != null) {
+            return false;
+        }
         return madeBy != null ? madeBy.equals(ticketUp.madeBy) : ticketUp.madeBy == null;
     }
 
